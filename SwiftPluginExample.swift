@@ -9,7 +9,7 @@ It is appended to our new class object to inform swift that we conform to it.
 However, all methods in this class are optional. The plugin does not have to
 inherit anyone of them and can instead manipulate using any calls within its
 public header files available at /Applications/Textual.app/Contents/Headers/ */
-class TPI_PreferencePaneExample: NSObject, THOPluginProtocol
+class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 {
 	func pluginSupportsServerInputCommands() -> (NSArray)
 	{
