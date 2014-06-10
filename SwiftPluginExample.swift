@@ -1,10 +1,3 @@
-//
-//  PreferencePaneExample.swift
-//  PreferencePaneExample
-//
-//  Created by Michael Morris on 6/10/14.
-//
-//
 
 import Foundation
 
