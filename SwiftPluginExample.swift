@@ -5,13 +5,10 @@ import Foundation
 /* As Textual creates a new instance of our primary class when the plugin
 loads, it must inherit NSObject to allow proper initialization. */
 /* THOPluginProtocol is the protocol available for plugin specific callbacks.
-It is appended to our new class object to inform swift that we conform to it.
-However, all methods in this class are optional. The plugin does not have to
-inherit anyone of them and can instead manipulate using any calls within its
-public header files available at /Applications/Textual.app/Contents/Headers/ */
+It is appended to our new class object to inform Swift that we conform to it. */
 class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 {
-	func subscribedServerInputCommands() -> [String]
+	func subscribedServerInputCommands() -> [AnyObject]!
 	{
 		/* Accept all incoming server data corresponding to the
 		commands PRIVMSG and NOTICE. The plugin will perform
@@ -25,8 +22,8 @@ class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 		/* Swift provides a very powerful switch statement so
 		it is easier to use that for identifying commands than
 		using an if statement if more than the two are added. */
-		let commandValue = (messageDict["messageCommand"] as NSString)
-		
+		let commandValue = (messageDict[THOPluginProtocolDidReceiveServerInputMessageCommandAttribute] as String)
+
 		switch (commandValue) {
 			case "PRIVMSG":
 				self.handleIncomingPrivateMessageCommand(client, senderDict: senderDict, messageDict: messageDict)
@@ -40,24 +37,22 @@ class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 	func handleIncomingPrivateMessageCommand(client: IRCClient!, senderDict: [NSObject : AnyObject]!, messageDict: [NSObject : AnyObject]!)
 	{
 		/* Get message sequence of incoming message. */
-		let messageReceived = (messageDict["messageSequence"] as NSString)
+		let messageReceived = (messageDict[THOPluginProtocolDidReceiveServerInputMessageSequenceAttribute] as String)
 		
-		let messageParamaters = (messageDict["messageParamaters"] as NSArray)
+		let messageParamaters = (messageDict[THOPluginProtocolDidReceiveServerInputMessageParamatersAttribute] as Array<String>)
 		
 		/* Get channel that message was sent from. */
 		/* The first paramater of the PRIVMSG command is always
 		the channel the message was targetted to. */
-		let senderChannelString = (messageParamaters[0] as String);
-		
-		let senderChannel = client.findChannel(senderChannelString)
+		let senderChannel = client.findChannel(messageParamaters[0])
 		
 		/* Do not accept private messages. */
-		if senderChannel.isChannel == false {
+		if senderChannel.isPrivateMessage {
 			return;
 		}
 		
 		/* Get sender of message. */
-		let messageSender = (senderDict["senderNickname"] as NSString)
+		let messageSender = (senderDict[THOPluginProtocolDidReceiveServerInputSenderNicknameAttribute] as String)
 		
 		/* Ignore this user, he's kind of a jerk. :-( */
 		if messageSender.hasPrefix("Alex") {
@@ -84,19 +79,15 @@ class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 	}
 	
 	/* Support a new command in text field. */
-	func subscribedUserInputCommands() -> [String]
+	func subscribedUserInputCommands() -> [AnyObject]!
 	{
 		return ["datetime"]
 	}
-	
+
 	func userInputCommandInvokedOnClient(client: IRCClient!, commandString: String!, messageString: String!)
 	{
-		/* Format message. */
 		let formattedString = ("The current time is: " + self.formattedDateTimeString());
-		
-		/* iomt() is in DDExtensions.h. It invokes on the call on the main
-		thread by proxying on the call. As printing a message involves
-		interaction with WebKit, we have to do work on main thread. */
+
 		self.performBlockOnMainThread({
 			client.sendPrivmsg(formattedString, toChannel:self.masterController().mainWindow.selectedChannel)
 		});
