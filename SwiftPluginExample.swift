@@ -6,93 +6,95 @@ import Foundation
 loads, it must inherit NSObject to allow proper initialization. */
 /* THOPluginProtocol is the protocol available for plugin specific callbacks.
 It is appended to our new class object to inform Swift that we conform to it. */
+
 class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 {
-	func subscribedServerInputCommands() -> [AnyObject]!
-	{
-		/* Accept all incoming server data corresponding to the
-		commands PRIVMSG and NOTICE. The plugin will perform
-		different actions for each value. */
-		
-		return ["privmsg", "notice"]
+	var subscribedServerInputCommands: [AnyObject]! {
+		get {
+			return ["privmsg", "notice"]
+		}
 	}
-	
-	func didReceiveServerInputOnClient(client: IRCClient!, senderInformation senderDict: [NSObject : AnyObject]!, messageInformation messageDict: [NSObject : AnyObject]!)
+
+	func didReceiveServerInput(inputObject: THOPluginDidReceiveServerInputConcreteObject!, onClient client: IRCClient!)
 	{
 		/* Swift provides a very powerful switch statement so
 		it is easier to use that for identifying commands than
 		using an if statement if more than the two are added. */
-		let commandValue = (messageDict[THOPluginProtocolDidReceiveServerInputMessageCommandAttribute] as String)
 
-		switch (commandValue) {
+		NSLog("%@ %@", inputObject.messageCommand, inputObject.messageParamaters)
+
+		switch (inputObject.messageCommand) {
 			case "PRIVMSG":
-				self.handleIncomingPrivateMessageCommand(client, senderDict: senderDict, messageDict: messageDict)
+				self.handleIncomingPrivateMessageCommand(inputObject, onClient: client)
 			case "NOTICE":
-				self.handleIncomingNoticeCommand(client, senderDict: senderDict, messageDict: messageDict)
+				self.handleIncomingNoticeCommand(inputObject, onClient: client)
 			default:
-				return;
+				return
 		}
 	}
-	
-	func handleIncomingPrivateMessageCommand(client: IRCClient!, senderDict: [NSObject : AnyObject]!, messageDict: [NSObject : AnyObject]!)
+
+	func handleIncomingPrivateMessageCommand(inputObject: THOPluginDidReceiveServerInputConcreteObject!, onClient client: IRCClient!)
 	{
 		/* Get message sequence of incoming message. */
-		let messageReceived = (messageDict[THOPluginProtocolDidReceiveServerInputMessageSequenceAttribute] as String)
-		
-		let messageParamaters = (messageDict[THOPluginProtocolDidReceiveServerInputMessageParamatersAttribute] as Array<String>)
-		
+		let messageReceived = (inputObject.messageSequence as String)
+
+		let messageParamaters = (inputObject.messageParamaters as! Array<String>)
+
 		/* Get channel that message was sent from. */
 		/* The first paramater of the PRIVMSG command is always
 		the channel the message was targetted to. */
 		let senderChannel = client.findChannel(messageParamaters[0])
-		
+
 		/* Do not accept private messages. */
 		if senderChannel.isPrivateMessage {
-			return;
+			return
 		}
-		
+
 		/* Get sender of message. */
-		let messageSender = (senderDict[THOPluginProtocolDidReceiveServerInputSenderNicknameAttribute] as String)
-		
+		let messageSender = (inputObject.senderNickname as String)
+
 		/* Ignore this user, he's kind of a jerk. :-( */
 		if messageSender.hasPrefix("Alex") {
-			return;
+			return
 		}
-		
+
 		/* Compare it against a specific value. */
 		if (messageReceived == "do you know what time it is?" ||
 			messageReceived == "does anybody know what time it is?")
 		{
 			/* Format message. */
-			let formattedString = (messageSender + " the time where I am is: " + self.formattedDateTimeString());
-			
+			let formattedString = (messageSender + ", the time where I am is: " + self.formattedDateTimeString())
+
 			/* Invoke the client on the main thread when sending. */
 			self.performBlockOnMainThread({
 				client.sendPrivmsg(formattedString, toChannel: senderChannel)
-			});
+			})
 		}
 	}
-	
-	func handleIncomingNoticeCommand(client: IRCClient!, senderDict: [NSObject : AnyObject]!, messageDict: [NSObject : AnyObject]!)
+
+	func handleIncomingNoticeCommand(inputObject: THOPluginDidReceiveServerInputConcreteObject!, onClient client: IRCClient!)
 	{
 		// Not implemented.
 	}
-	
+
 	/* Support a new command in text field. */
-	func subscribedUserInputCommands() -> [AnyObject]!
-	{
-		return ["datetime"]
+	var subscribedUserInputCommands: [AnyObject]! {
+		get {
+			return ["datetime"]
+		}
 	}
 
 	func userInputCommandInvokedOnClient(client: IRCClient!, commandString: String!, messageString: String!)
 	{
-		let formattedString = ("The current time is: " + self.formattedDateTimeString());
+		let formattedString = ("The current time is: " + self.formattedDateTimeString())
+
+		let mainWindow = self.masterController().mainWindow;
 
 		self.performBlockOnMainThread({
-			client.sendPrivmsg(formattedString, toChannel:self.masterController().mainWindow.selectedChannel)
-		});
+			client.sendPrivmsg(formattedString, toChannel:mainWindow.selectedChannel)
+		})
 	}
-	
+
 	/* Helper functions. */
 	func formattedDateTimeString() -> (String)
 	{

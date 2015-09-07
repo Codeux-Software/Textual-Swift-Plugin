@@ -114,7 +114,8 @@
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 			};
 			buildConfigurationList = 1DEB911E08733D790010E9CD /* Build configuration list for PBXProject "SwiftPluginExample" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -161,13 +162,14 @@
 		1DEB911B08733D790010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "/Applications/Textual 5.app/Contents/MacOS/Textual 5";
+				BUNDLE_LOADER = /Applications/Textual.app/Contents/MacOS/Textual;
 				COMBINE_HIDPI_IMAGES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = "\"/Applications/Textual 5.app/Contents/Frameworks/**\"";
-				HEADER_SEARCH_PATHS = "\"/Applications/Textual 5.app/Contents/Headers/**\"";
+				FRAMEWORK_SEARCH_PATHS = "\"/Applications/Textual.app/Contents/Frameworks/**\"";
+				HEADER_SEARCH_PATHS = "\"/Applications/Textual.app/Contents/Headers/**\"";
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.extension.SwiftPluginExample;
 				PRODUCT_NAME = SwiftPluginExample;
 				SWIFT_OBJC_BRIDGING_HEADER = "SwiftPluginExample-Bridging-Header.h";
 				WRAPPER_EXTENSION = bundle;
@@ -177,13 +179,14 @@
 		1DEB911C08733D790010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "/Applications/Textual 5.app/Contents/MacOS/Textual 5";
+				BUNDLE_LOADER = /Applications/Textual.app/Contents/MacOS/Textual;
 				COMBINE_HIDPI_IMAGES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = "\"/Applications/Textual 5.app/Contents/Frameworks/**\"";
-				HEADER_SEARCH_PATHS = "\"/Applications/Textual 5.app/Contents/Headers/**\"";
+				FRAMEWORK_SEARCH_PATHS = "\"/Applications/Textual.app/Contents/Frameworks/**\"";
+				HEADER_SEARCH_PATHS = "\"/Applications/Textual.app/Contents/Headers/**\"";
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.extension.SwiftPluginExample;
 				PRODUCT_NAME = SwiftPluginExample;
 				SWIFT_OBJC_BRIDGING_HEADER = "SwiftPluginExample-Bridging-Header.h";
 				WRAPPER_EXTENSION = bundle;
@@ -193,7 +196,6 @@
 		1DEB911F08733D790010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				ONLY_ACTIVE_ARCH = YES;
 			};
