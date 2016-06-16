@@ -9,36 +9,33 @@ It is appended to our new class object to inform Swift that we conform to it. */
 
 class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 {
-	var subscribedServerInputCommands: [AnyObject]! {
+	var subscribedServerInputCommands: [String] {
 		get {
 			return ["privmsg", "notice"]
 		}
 	}
 
-	func didReceiveServerInput(inputObject: THOPluginDidReceiveServerInputConcreteObject!, onClient client: IRCClient!)
+	func didReceiveServerInput(_ inputObject: THOPluginDidReceiveServerInputConcreteObject, on client: IRCClient)
 	{
 		/* Swift provides a very powerful switch statement so
 		it is easier to use that for identifying commands than
 		using an if statement if more than the two are added. */
-
-		NSLog("%@ %@", inputObject.messageCommand, inputObject.messageParamaters)
-
 		switch (inputObject.messageCommand) {
 			case "PRIVMSG":
-				self.handleIncomingPrivateMessageCommand(inputObject, onClient: client)
+				handleIncomingPrivateMessageCommand(inputObject, on: client)
 			case "NOTICE":
-				self.handleIncomingNoticeCommand(inputObject, onClient: client)
+				handleIncomingNoticeCommand(inputObject, on: client)
 			default:
 				return
 		}
 	}
 
-	func handleIncomingPrivateMessageCommand(inputObject: THOPluginDidReceiveServerInputConcreteObject!, onClient client: IRCClient!)
+	func handleIncomingPrivateMessageCommand(_ inputObject: THOPluginDidReceiveServerInputConcreteObject, on client: IRCClient)
 	{
 		/* Get message sequence of incoming message. */
-		let messageReceived = (inputObject.messageSequence as String)
+		let messageReceived = inputObject.messageSequence
 
-		let messageParamaters = (inputObject.messageParamaters as! Array<String>)
+		let messageParamaters = inputObject.messageParamaters
 
 		/* Get channel that message was sent from. */
 		/* The first paramater of the PRIVMSG command is always
@@ -46,12 +43,12 @@ class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 		let senderChannel = client.findChannel(messageParamaters[0])
 
 		/* Do not accept private messages. */
-		if senderChannel.isPrivateMessage {
+		if ((senderChannel?.isPrivateMessage) != nil) {
 			return
 		}
 
 		/* Get sender of message. */
-		let messageSender = (inputObject.senderNickname as String)
+		let messageSender = inputObject.senderNickname
 
 		/* Ignore this user, he's kind of a jerk. :-( */
 		if messageSender.hasPrefix("Alex") {
@@ -63,47 +60,47 @@ class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 			messageReceived == "does anybody know what time it is?")
 		{
 			/* Format message. */
-			let formattedString = (messageSender + ", the time where I am is: " + self.formattedDateTimeString())
+			let formattedString = (messageSender + ", the time where I am is: " + formattedDateTimeString())
 
 			/* Invoke the client on the main thread when sending. */
-			self.performBlockOnMainThread({
-				client.sendPrivmsg(formattedString, toChannel: senderChannel)
+			performBlock(onMainThread: {
+				client.sendPrivmsg(formattedString, to: senderChannel)
 			})
 		}
 	}
 
-	func handleIncomingNoticeCommand(inputObject: THOPluginDidReceiveServerInputConcreteObject!, onClient client: IRCClient!)
+	func handleIncomingNoticeCommand(_ inputObject: THOPluginDidReceiveServerInputConcreteObject, on client: IRCClient)
 	{
-		// Not implemented.
+		// Not implemented
 	}
 
 	/* Support a new command in text field. */
-	var subscribedUserInputCommands: [AnyObject]! {
+	var subscribedUserInputCommands: [String] {
 		get {
 			return ["datetime"]
 		}
 	}
 
-	func userInputCommandInvokedOnClient(client: IRCClient!, commandString: String!, messageString: String!)
+	func userInputCommandInvoked(on client: IRCClient, command commandString: String, messageString: String)
 	{
-		let formattedString = ("The current time is: " + self.formattedDateTimeString())
+		let formattedString = ("The current time is: " + formattedDateTimeString())
 
-		let mainWindow = self.masterController().mainWindow;
+		let mainWindow = masterController().mainWindow
 
-		self.performBlockOnMainThread({
-			client.sendPrivmsg(formattedString, toChannel:mainWindow.selectedChannel)
+		performBlock(onMainThread: {
+			client.sendPrivmsg(formattedString, to:mainWindow?.selectedChannel)
 		})
 	}
 
 	/* Helper functions. */
 	func formattedDateTimeString() -> (String)
 	{
-		let dateFormatter = NSDateFormatter()
+		let dateFormatter = DateFormatter()
 		
-		dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
-		dateFormatter.timeStyle = NSDateFormatterStyle.FullStyle
+		dateFormatter.dateStyle = DateFormatter.Style.fullStyle
+		dateFormatter.timeStyle = DateFormatter.Style.fullStyle
 		
-		let formattedDate = dateFormatter.stringFromDate(NSDate())
+		let formattedDate = dateFormatter.string(from: Date())
 		
 		return formattedDate
 	}
