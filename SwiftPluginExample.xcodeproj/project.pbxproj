@@ -9,11 +9,9 @@
 /* Begin PBXBuildFile section */
 		4C38AD881946BB2C00B4A7AB /* SwiftPluginExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C38AD871946BB2C00B4A7AB /* SwiftPluginExample.swift */; };
 		4C51BE9412D0471600E79CEB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C51BE9312D0471600E79CEB /* Cocoa.framework */; };
-		8D576314048677EA00EA77CD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		4C38AD861946BB2B00B4A7AB /* SwiftPluginExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftPluginExample-Bridging-Header.h"; sourceTree = "<group>"; };
 		4C38AD871946BB2C00B4A7AB /* SwiftPluginExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftPluginExample.swift; sourceTree = "<group>"; };
 		4C51BE9312D0471600E79CEB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -26,7 +24,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D576314048677EA00EA77CD /* CoreFoundation.framework in Frameworks */,
 				4C51BE9412D0471600E79CEB /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -49,7 +46,6 @@
 			isa = PBXGroup;
 			children = (
 				4C51BE9312D0471600E79CEB /* Cocoa.framework */,
-				0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

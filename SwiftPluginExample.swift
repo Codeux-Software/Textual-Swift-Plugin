@@ -64,7 +64,7 @@ class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 
 			/* Invoke the client on the main thread when sending. */
 			performBlock(onMainThread: {
-				client.sendPrivmsg(formattedString, to: senderChannel)
+				client.sendPrivmsg(formattedString, to: senderChannel!)
 			})
 		}
 	}
@@ -88,7 +88,7 @@ class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 		let mainWindow = masterController().mainWindow
 
 		performBlock(onMainThread: {
-			client.sendPrivmsg(formattedString, to:mainWindow?.selectedChannel)
+			client.sendPrivmsg(formattedString, to:mainWindow.selectedChannel!)
 		})
 	}
 
@@ -97,8 +97,8 @@ class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 	{
 		let dateFormatter = DateFormatter()
 		
-		dateFormatter.dateStyle = DateFormatter.Style.fullStyle
-		dateFormatter.timeStyle = DateFormatter.Style.fullStyle
+		dateFormatter.dateStyle = .full
+		dateFormatter.timeStyle = .full
 		
 		let formattedDate = dateFormatter.string(from: Date())
 		
