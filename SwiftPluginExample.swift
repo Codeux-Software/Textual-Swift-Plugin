@@ -43,7 +43,7 @@ class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 		let senderChannel = client.findChannel(messageParamaters[0])
 
 		/* Do not accept private messages. */
-		if ((senderChannel?.isPrivateMessage) != nil) {
+		if (senderChannel?.isPrivateMessage == false) {
 			return
 		}
 
