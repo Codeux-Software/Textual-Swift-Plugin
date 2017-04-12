@@ -17,6 +17,6 @@
 	<key>MinimumTextualVersion</key>
 	<string>6.0.0</string>
 	<key>NSPrincipalClass</key>
-	<string>TPI_SwiftPluginExample</string>
+	<string>$(PRODUCT_NAME).TPI_SwiftPluginExample</string>
 </dict>
 </plist>
