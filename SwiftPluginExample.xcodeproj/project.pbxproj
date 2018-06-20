@@ -111,10 +111,10 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 1000;
 				TargetAttributes = {
 					8D57630D048677EA00EA77CD = {
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -173,7 +173,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.extension.SwiftPluginExample;
 				PRODUCT_NAME = SwiftPluginExample;
 				SWIFT_OBJC_BRIDGING_HEADER = "SwiftPluginExample-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -192,7 +193,8 @@
 				PRODUCT_NAME = SwiftPluginExample;
 				SWIFT_OBJC_BRIDGING_HEADER = "SwiftPluginExample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
