@@ -1,2 +1,2 @@
 
-#import "TextualApplication.h"
+#import "Textual.h"

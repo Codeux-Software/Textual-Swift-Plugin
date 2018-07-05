@@ -3,23 +3,24 @@
 import Foundation
 
 /* As Textual creates a new instance of our primary class when the plugin
-loads, it must inherit NSObject to allow proper initialization. */
+ loads, it must inherit NSObject to allow proper initialization. */
 /* THOPluginProtocol is the protocol available for plugin specific callbacks.
-It is appended to our new class object to inform Swift that we conform to it. */
+ It is appended to our new class object to inform Swift that we conform to it.
+ Methods that you override must be declared as Objective-C or Textual wont see
+ that they exist and not call out to them. */
 
+@objc
 class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 {
-	var subscribedServerInputCommands: [String] {
-		get {
-			return ["privmsg", "notice"]
-		}
-	}
+	@objc
+	let subscribedServerInputCommands = ["privmsg", "notice"]
 
+	@objc
 	func didReceiveServerInput(_ inputObject: THOPluginDidReceiveServerInputConcreteObject, on client: IRCClient)
 	{
 		/* Swift provides a very powerful switch statement so
-		it is easier to use that for identifying commands than
-		using an if statement if more than the two are added. */
+		 it is easier to use that for identifying commands than
+		 using an if statement if more than the two are added. */
 		switch (inputObject.messageCommand) {
 			case "PRIVMSG":
 				handleIncomingPrivateMessageCommand(inputObject, on: client)
@@ -39,11 +40,11 @@ class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 
 		/* Get channel that message was sent from. */
 		/* The first paramater of the PRIVMSG command is always
-		the channel the message was targetted to. */
+		 the channel the message was targetted to. */
 		let senderChannel = client.findChannel(messageParamaters[0])
 
 		/* Do not accept private messages. */
-		if (senderChannel?.isChannel == false) {
+		if (senderChannel?.isChannel != true) {
 			return
 		}
 
@@ -60,7 +61,7 @@ class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 			messageReceived == "does anybody know what time it is?")
 		{
 			/* Format message. */
-			let formattedString = (messageSender + ", the time where I am is: " + formattedDateTimeString())
+			let formattedString = ("\(messageSender), the time where I am is: \(formattedDateTimeString())")
 
 			/* Invoke the client on the main thread when sending. */
 			performBlock(onMainThread: {
@@ -75,25 +76,25 @@ class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 	}
 
 	/* Support a new command in text field. */
-	var subscribedUserInputCommands: [String] {
-		get {
-			return ["datetime"]
-		}
-	}
+	@objc
+	let subscribedUserInputCommands = ["datetime"]
 
+	@objc
 	func userInputCommandInvoked(on client: IRCClient, command commandString: String, messageString: String)
 	{
+		guard let selectedChannel = masterController().mainWindow.selectedChannel else {
+			return
+		}
+
 		let formattedString = ("The current time is: " + formattedDateTimeString())
 
-		let mainWindow = masterController().mainWindow
-
 		performBlock(onMainThread: {
-			client.sendPrivmsg(formattedString, to:mainWindow.selectedChannel!)
+			client.sendPrivmsg(formattedString, to: selectedChannel)
 		})
 	}
 
 	/* Helper functions. */
-	func formattedDateTimeString() -> (String)
+	func formattedDateTimeString() -> String
 	{
 		let dateFormatter = DateFormatter()
 		
