@@ -86,7 +86,7 @@ class TPI_SwiftPluginExample: NSObject, THOPluginProtocol
 			return
 		}
 
-		let formattedString = ("The current time is: " + formattedDateTimeString())
+		let formattedString = ("The current time is: \(formattedDateTimeString())")
 
 		performBlock(onMainThread: {
 			client.sendPrivmsg(formattedString, to: selectedChannel)
